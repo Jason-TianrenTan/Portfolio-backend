@@ -19,6 +19,12 @@ public class RepositoryController {
 
     @GetMapping
     Map<String, Integer> getLineCounts() {
-        return repositoryDataService.getLinesMap();
+        return repositoryDataService.getLineCounts();
+    }
+
+    //Testing url
+    @GetMapping("/date")
+    String getDate() {
+        return repositoryDataService.getDate();
     }
 }

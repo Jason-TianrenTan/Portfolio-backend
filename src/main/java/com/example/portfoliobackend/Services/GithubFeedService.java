@@ -1,5 +1,6 @@
 package com.example.portfoliobackend.Services;
 
+import com.example.portfoliobackend.ApplicationContextProvider;
 import com.example.portfoliobackend.Models.RepositoryBean;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
@@ -24,6 +25,8 @@ public class GithubFeedService {
     private final WebClient webClient;
     private List<String> suffixes = new ArrayList<>(Arrays.asList(".java", ".js", ".cpp"));
     private static final Logger logger = LoggerFactory.getLogger(GithubFeedService.class);
+    private RepositoryDataService repositoryDataService = ApplicationContextProvider.getApplicationContext()
+            .getBean(RepositoryDataService.class);
 
     public GithubFeedService(WebClient.Builder builder) {
         this.webClient = builder.build();
@@ -42,7 +45,7 @@ public class GithubFeedService {
                         File dir = cloneRepo(repo.getHtmlUrl() + ".git", repo.getName());
                         logger.info("Walking repo...");
                         Map<String, Integer> lines = walkRepo(dir);
-                        logger.info(String.valueOf(lines));
+                        repositoryDataService.mergeLineCounts(lines);
                     }
                 }));
     }
